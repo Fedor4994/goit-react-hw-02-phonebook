@@ -2,23 +2,46 @@ import React, { Component } from 'react';
 import s from './ContactForm.module.css';
 
 export default class ContactForm extends Component {
-  render() {
-    const onAddContact = this.props.onAddContact;
-    const onChange = this.props.onChange;
+  state = {
+    name: '',
+    number: '',
+  };
 
-    const contactName = this.props.name;
-    const contactNumber = this.props.number;
+  onChange = event => {
+    const inputName = event.target.name;
+
+    this.setState({
+      [inputName]: event.target.value,
+    });
+  };
+
+  reset = () => {
+    this.setState({
+      name: '',
+      number: '',
+    });
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+    const { name, number } = this.state;
+    this.props.onAddContact(name, number);
+    this.reset();
+  };
+
+  render() {
+    const { name, number } = this.state;
 
     return (
-      <form onSubmit={onAddContact} className={s.contactForm}>
+      <form onSubmit={this.handleSubmit} className={s.contactForm}>
         <label className={s.contactLabel}>
           Name
           <input
             className={s.contactInput}
-            onChange={onChange}
+            onChange={this.onChange}
             type="text"
             name="name"
-            value={contactName}
+            value={name}
             pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
             title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
             required
@@ -29,10 +52,10 @@ export default class ContactForm extends Component {
           Number
           <input
             className={s.contactInput}
-            onChange={onChange}
+            onChange={this.onChange}
             type="tel"
             name="number"
-            value={contactNumber}
+            value={number}
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required
