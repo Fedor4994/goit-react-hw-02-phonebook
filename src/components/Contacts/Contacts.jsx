@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import s from './Contacts.module.css';
 import Contact from 'components/Contact/Contact';
 
@@ -21,3 +22,15 @@ export default class Contacts extends Component {
     return 'There are no contacts';
   }
 }
+
+Contacts.propTypes = {
+  contacts: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      number: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+    }).isRequired
+  ).isRequired,
+
+  onContactDelete: PropTypes.func.isRequired,
+};
