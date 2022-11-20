@@ -10,9 +10,10 @@ export default class ContactForm extends Component {
 
   onChange = event => {
     const inputName = event.target.name;
+    const inputValue = event.target.value;
 
     this.setState({
-      [inputName]: event.target.value,
+      [inputName]: inputValue,
     });
   };
 

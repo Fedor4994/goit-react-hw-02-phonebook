@@ -11,15 +11,35 @@ export class App extends Component {
     filter: '',
   };
 
+  componentDidMount() {
+    const savedContacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(savedContacts);
+
+    if (parsedContacts) {
+      this.setState({
+        contacts: parsedContacts,
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { contacts } = this.state;
+    const prevContacts = prevState.contacts;
+
+    if (contacts !== prevContacts) {
+      localStorage.setItem('contacts', JSON.stringify(contacts));
+    }
+  }
+
   onSubmit = (name, number) => {
     const { contacts } = this.state;
     const updatebleContacts = [...contacts];
 
-    const repeatedContact = updatebleContacts.find(
+    const isRepeatedContact = updatebleContacts.find(
       contact => contact.name === name
     );
 
-    if (repeatedContact) {
+    if (isRepeatedContact) {
       alert(`${name} is already in contacts`);
     } else {
       updatebleContacts.push({
@@ -44,8 +64,8 @@ export class App extends Component {
     const { contacts, filter } = this.state;
     const normalizedFilter = filter.toLowerCase();
 
-    const visibleContacts = contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normalizedFilter)
+    const visibleContacts = contacts.filter(({ name }) =>
+      name.toLowerCase().includes(normalizedFilter)
     );
 
     return visibleContacts;
@@ -58,22 +78,6 @@ export class App extends Component {
       };
     });
   };
-
-  componentDidMount() {
-    const savedContacts = localStorage.getItem('contacts');
-    const parsedContacts = JSON.parse(savedContacts);
-    if (parsedContacts) {
-      this.setState({
-        contacts: parsedContacts,
-      });
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.contacts !== prevState.contacts) {
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-    }
-  }
 
   render() {
     const { filter } = this.state;
