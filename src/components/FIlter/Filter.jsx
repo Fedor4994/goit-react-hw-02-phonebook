@@ -6,7 +6,7 @@ const Filter = ({ filter, onChange }) => {
   return (
     <>
       <label className={s.filterLabel}>
-        Find contacts by name{' '}
+        Find contacts by name
         <input
           className={s.filterInput}
           type="text"
